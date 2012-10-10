@@ -1,4 +1,4 @@
-﻿//  ----------------------------------------------------------------------------
+//  ----------------------------------------------------------------------------
 //
 //  bootstrap-typeahead.js  
 //
@@ -408,7 +408,8 @@ function ($) {
             }
 
             this.$menu.on('click', $.proxy(this.click, this))
-                      .on('mouseenter', 'li', $.proxy(this.mouseenter, this));
+                      .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
+                      .on('mousedown', $.proxy(this.mousedown, this));
         },
 
         //------------------------------------------------------------------
@@ -481,11 +482,14 @@ function ($) {
         //
         blur: function (e) {
             var that = this;
+            var foc = $( document.activeElement );
             e.stopPropagation();
             e.preventDefault();
             setTimeout(function () {
-                if (!that.$menu.is(':focus')) {
+                if (!that.$menuClicked) {
                   that.hide();
+                } else {
+                    that.$element.focus();
                 }
             }, 150)
         },
@@ -507,6 +511,10 @@ function ($) {
         mouseenter: function (e) {
             this.$menu.find('.active').removeClass('active');
             $(e.currentTarget).addClass('active');
+        },
+        
+        mousedown: function (e) {
+            this.$menuClicked = true;
         }
     }
 
